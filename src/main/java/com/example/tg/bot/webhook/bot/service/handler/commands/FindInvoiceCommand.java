@@ -1,9 +1,10 @@
-package com.example.tg.bot.webhook.bot.handler.commands;
+package com.example.tg.bot.webhook.bot.service.handler.commands;
 
 import com.example.tg.bot.webhook.bot.model.CallbackCommandEnum;
 import com.example.tg.bot.webhook.bot.model.CommandEnum;
 import com.example.tg.bot.webhook.bot.utils.SendUtils;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -15,7 +16,7 @@ import java.util.Optional;
 @Component
 public class FindInvoiceCommand extends AbstractCommandHandler {
     @Override
-    public Optional<SendMessage.SendMessageBuilder> handle(Update update) {
+    public Optional<BotApiMethod<?>> handle(Update update) {
         String[] s = update.getMessage().getText().split(" ");
         String invoiceValue = s[1];
         InlineKeyboardButton paymentButton = InlineKeyboardButton.builder()

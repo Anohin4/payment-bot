@@ -1,6 +1,6 @@
-package com.example.tg.bot.webhook.bot.handler.commands;
+package com.example.tg.bot.webhook.bot.service.handler.commands;
 
-import com.example.tg.bot.webhook.bot.handler.UpdateHandler;
+import com.example.tg.bot.webhook.bot.service.handler.UpdateHandler;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import static java.util.Objects.nonNull;

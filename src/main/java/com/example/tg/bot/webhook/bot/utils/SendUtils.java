@@ -1,18 +1,19 @@
 package com.example.tg.bot.webhook.bot.utils;
 
+import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethodMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 public class SendUtils {
-    public static SendMessage.SendMessageBuilder getMessage(Long who, String what, InlineKeyboardMarkup markup) {
+    public static BotApiMethodMessage getMessage(Long who, String what, InlineKeyboardMarkup markup) {
         return SendMessage.builder()
                 .chatId(who.toString()) //Who are we sending a message to
                 .text(what)
-                .replyMarkup(markup);
+                .replyMarkup(markup).build();
     }
-    public static SendMessage.SendMessageBuilder getMessage(Long who, String what) {
+    public static BotApiMethodMessage getMessage(Long who, String what) {
         return SendMessage.builder()
                 .chatId(who.toString()) //Who are we sending a message to
-                .text(what);
+                .text(what).build();
     }
 }

@@ -1,6 +1,8 @@
-package com.example.tg.bot.webhook.bot.handler;
+package com.example.tg.bot.webhook.bot.service.handler;
 
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -16,18 +18,18 @@ public class CommandChainImpl implements CommandChain {
     }
 
     @Override
-    public SendMessage handle(Update update) {
-        Optional<SendMessage.SendMessageBuilder> builder = Optional.empty();
+    public BotApiMethod<?> handle(Update update) {
+        Optional<BotApiMethod<?>> builder = Optional.empty();
         for (UpdateHandler updateHandler : handlerList) {
             if (updateHandler.on(update)) {
                 builder = updateHandler.handle(update);
                 break;
             }
         }
-        if(builder.isEmpty()) {
+        if (builder.isEmpty()) {
             throw new RuntimeException("No handler");
         }
 
-        return builder.get().build();
+        return builder.get();
     }
 }
