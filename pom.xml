@@ -14,26 +14,19 @@
     <name>tg-bot-webhook</name>
     <description>tg-bot-webhook</description>
     <properties>
+
+        <log4j.version>2.17.1</log4j.version>
         <java.version>17</java.version>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
+            <groupId>com.yandex.cloud</groupId>
+            <artifactId>java-sdk-functions</artifactId>
+            <version>2.6.3</version>
         </dependency>
         <dependency>
             <groupId>org.telegram</groupId>
-            <artifactId>telegrambots-spring-boot-starter</artifactId>
+            <artifactId>telegrambots</artifactId>
             <version>6.5.0</version>
         </dependency>
         <dependency>
@@ -46,14 +39,35 @@
             <artifactId>ydb-sdk-table</artifactId>
             <version>2.0.1</version>
         </dependency>
+        <dependency>
+            <groupId>tech.ydb.auth</groupId>
+            <artifactId>yc-auth-provider</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.26</version>
+        </dependency>
+        <dependency>
+            <groupId>com.yandex.cloud</groupId>
+            <artifactId>java-sdk-services</artifactId>
+            <version>2.6.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.2</version>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
