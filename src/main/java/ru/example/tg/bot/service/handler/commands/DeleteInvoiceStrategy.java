@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.List;
 import java.util.Optional;
 
 public class DeleteInvoiceStrategy extends AbstractCommandHandlerStrategy implements AdminCommand {
@@ -20,10 +21,10 @@ public class DeleteInvoiceStrategy extends AbstractCommandHandlerStrategy implem
     }
 
     @Override
-    public Optional<BotApiMethod<?>> handle(Update update) {
+    public List<BotApiMethod<?>> handle(Update update) {
         System.out.println("Start of DeleteInvoiceStrategy");
         if (update.getMessage().getText().equals(CommandEnum.DELETE_INVOICE.getValue())) {
-            return Optional.of(SendMessage.builder()
+            return List.of(SendMessage.builder()
                     .chatId(update.getMessage().getChatId())
                     .text("Не указан ИД инвойса")
                     .build());
@@ -31,7 +32,7 @@ public class DeleteInvoiceStrategy extends AbstractCommandHandlerStrategy implem
         Message message = update.getMessage();
         repository.deleteInvoiceById(message.getDate().longValue());
 
-        return Optional.of(SendMessage.builder()
+        return List.of(SendMessage.builder()
                 .chatId(message.getChatId())
                 .text("Запрос выполнен")
                 .build());

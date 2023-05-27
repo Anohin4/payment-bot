@@ -37,14 +37,14 @@ public class TgBotWebhookApplication implements Function<Request, Response> {
 
         List<UpdateHandlingStrategy> updateHandlingStrategies = handlingStrategyList(tgBotPayment, ydbRepository, ownerChat);
 
-        CommandChainImpl commandChain = new CommandChainImpl(updateHandlingStrategies);
+        CommandChainImpl commandChain = new CommandChainImpl(updateHandlingStrategies, ownerChat);
         UpdateService updateService = new UpdateService(commandChain, tgBotToken, ownerChat);
         updateService.handleUpdate(body);
         return new Response(200, "Ok");
     }
 
     private List<UpdateHandlingStrategy> handlingStrategyList(String paymentToken, DatabaseRepository repository, String ownerChat) {
-        GetInvoiceStrategy getInvoiceStrategy = new GetInvoiceStrategy(repository, paymentToken, ownerChat);
+        GetInvoiceForUserStrategy getInvoiceStrategy = new GetInvoiceForUserStrategy(repository, paymentToken, ownerChat);
         return List.of(
                 new CreateInvoiceStrategy(repository, ownerChat),
                 getInvoiceStrategy,

@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -15,13 +16,13 @@ public class StartStrategy extends AbstractCommandHandlerStrategy {
     }
 
     @Override
-    public Optional<BotApiMethod<?>> handle(Update update) {
-        return Optional.of(SendMessage.builder()
+    public List<BotApiMethod<?>> handle(Update update) {
+        return List.of(SendMessage.builder()
                 .chatId(update.getMessage().getChatId())
                 .text("""
                         Привет! 
-                        С помощью этого бота можно оплатить услуги по локализации видеоигр и переводу текстов, оказанные ИП Анохиной Е.Е..
-                        Если на ваше имя пользователя есть инвойс,  бот без проблем его найдет.""")
+                        С помощью этого бота можно оплатить услуги по локализации видеоигр и переводу текстов, оказанные ИП Анохиной Е.Е.
+                        Если на ваше имя пользователя есть инвойс, бот без проблем его найдет.""")
                 .build());
 
     }

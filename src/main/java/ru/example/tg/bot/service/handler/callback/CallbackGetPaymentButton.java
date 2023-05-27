@@ -5,7 +5,7 @@ import ru.example.tg.bot.service.handler.commands.UpdateHandlingStrategy;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.*;
 
-import java.util.Optional;
+import java.util.List;
 
 import static java.util.Objects.nonNull;
 
@@ -17,7 +17,7 @@ public class CallbackGetPaymentButton implements UpdateHandlingStrategy {
     }
 
     @Override
-    public Optional<BotApiMethod<?>> handle(Update update) {
+    public List<BotApiMethod<?>> handle(Update update) {
         CallbackQuery callbackQuery = update.getCallbackQuery();
         String userName = callbackQuery.getFrom().getUserName();
         Chat chat = callbackQuery.getMessage().getChat();

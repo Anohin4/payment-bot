@@ -7,9 +7,11 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.List;
 import java.util.Optional;
 
 import static java.util.Objects.nonNull;
+import static ru.example.tg.bot.utils.Utils.getInvoiceKeyboard;
 
 
 public class OkPaymentQueryHandler implements UpdateHandlingStrategy {
@@ -22,7 +24,7 @@ public class OkPaymentQueryHandler implements UpdateHandlingStrategy {
     }
 
     @Override
-    public Optional<BotApiMethod<?>> handle(Update update) {
+    public List<BotApiMethod<?>> handle(Update update) {
         System.out.println("Start of OkPaymentQueryHandler");
         var result = update.getMessage().getSuccessfulPayment();
         int i = result.getTotalAmount() / 100;
@@ -33,15 +35,25 @@ public class OkPaymentQueryHandler implements UpdateHandlingStrategy {
                 .providerPaymentChargeId(result.getProviderPaymentChargeId())
                 .telegramPaymentChargeId(result.getTelegramPaymentChargeId()).build());
 
-        return Optional.of(SendMessage.builder()
+        return List.of(
+                //сообщение про успешную оплату владельцу бота
+                SendMessage.builder()
                 .chatId(ownerChat)
                 .text("Был оплачен инвойс "+ invoicePayload + " на сумму " + i + " рублей, пользователем " + userName)
-                .build());
+                .build(),
+                //сообщение про успешную оплату тому, кто оплатил
+                SendMessage.builder()
+                        .chatId(update.getMessage().getChatId())
+                        .text("""
+                                Спасибо! Оплата прошла успешно.
+                                                                
+                                Если вам нужно оплатить ещё один инвойс, нажмите  ⬇️)""")
+                        .replyMarkup(getInvoiceKeyboard())
+                        .build());
     }
 
     @Override
     public boolean on(Update update) {
-
         return nonNull(update.getMessage()) && nonNull(update.getMessage().getSuccessfulPayment());
 
     }

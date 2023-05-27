@@ -9,6 +9,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -23,7 +25,7 @@ public class CreateInvoiceStrategy extends AbstractCommandHandlerStrategy implem
     }
 
     @Override
-    public Optional<BotApiMethod<?>> handle(Update update) {
+    public List<BotApiMethod<?>> handle(Update update) {
         System.out.println("Start of CreateInvoiceStrategy");
         Message message = update.getMessage();
         String text = message.getText();
@@ -34,12 +36,12 @@ public class CreateInvoiceStrategy extends AbstractCommandHandlerStrategy implem
 
     }
 
-    private Optional<BotApiMethod<?>> getInvoice(Message message) {
+    private List<BotApiMethod<?>> getInvoice(Message message) {
         String text = message.getText();
         long rowId = message.getDate().longValue();
 
         Optional<InvoiceEntity> byId = repository.findById(rowId);
-        if (byId.isPresent()) return Optional.empty();
+        if (byId.isPresent()) return Collections.emptyList();
 
         String[] split = text.substring(startIndex).split("//");
         if (split.length != 3) return getDefaultMessage(message);
@@ -69,8 +71,8 @@ public class CreateInvoiceStrategy extends AbstractCommandHandlerStrategy implem
         return multiply.intValue();
     }
 
-    private Optional<BotApiMethod<?>> getDefaultMessage(Message message) {
-        return Optional.of(SendMessage.builder()
+    private List<BotApiMethod<?>> getDefaultMessage(Message message) {
+        return List.of(SendMessage.builder()
                 .chatId(message.getChatId())
                 .text("""
                         Для создания инвойса отправте команду в следующем формате:
@@ -80,15 +82,15 @@ public class CreateInvoiceStrategy extends AbstractCommandHandlerStrategy implem
                 .build());
     }
 
-    private Optional<BotApiMethod<?>> getErrorMessage(Message message, String eMessage) {
-        return Optional.of(SendMessage.builder()
+    private List<BotApiMethod<?>> getErrorMessage(Message message, String eMessage) {
+        return List.of(SendMessage.builder()
                 .chatId(message.getChatId())
                 .text("При создании инвойса произошла ошибка. Убедитесь, что корретно выполнен ввод данных " + eMessage)
                 .build());
     }
 
-    private Optional<BotApiMethod<?>> getSuccessMessage(Message message, Long id) {
-        return Optional.of(SendMessage.builder()
+    private List<BotApiMethod<?>> getSuccessMessage(Message message, Long id) {
+        return List.of(SendMessage.builder()
                 .chatId(message.getChatId())
                 .text("Инвойс успешно создан под номером " + id)
                 .build());

@@ -1,38 +1,53 @@
 package ru.example.tg.bot.service.handler;
 
-import ru.example.tg.bot.service.handler.commands.UpdateHandlingStrategy;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.example.tg.bot.service.handler.commands.UpdateHandlingStrategy;
+import ru.example.tg.bot.service.handler.other.UserMenuStrategy;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
+import static java.util.Objects.isNull;
 
 public class CommandChainImpl implements CommandChain {
     private final List<UpdateHandlingStrategy> handlerList;
+    private final UserMenuStrategy userMenuStrategy;
 
-    public CommandChainImpl(List<UpdateHandlingStrategy> handlerList) {
+    public CommandChainImpl(List<UpdateHandlingStrategy> handlerList, String ownerChatId) {
         this.handlerList = handlerList;
+        userMenuStrategy = new UserMenuStrategy(ownerChatId);
     }
 
     @Override
-    public BotApiMethod<?> handle(Update update) {
+    public List<BotApiMethod<?>> handle(Update update) {
 
-        Optional<BotApiMethod<?>> methodCall = Optional.empty();
+        UpdateHandlingStrategy handler = null;
         for (UpdateHandlingStrategy updateHandlingStrategy : handlerList) {
             if (updateHandlingStrategy.on(update)) {
-                methodCall = updateHandlingStrategy.handle(update);
+                handler = updateHandlingStrategy;
                 break;
             }
         }
-        if (methodCall.isEmpty()) {
-            return SendMessage.builder()
-                    .chatId(update.getMessage().getChatId())
-                    .text("Запрос не удалось обработать сообщение")
-                    .build();
+        List<BotApiMethod<?>> handleResult = getHanlderResult(handler, update);
+        //если нам нужно добавлять меню - добавляем
+        if(userMenuStrategy.on(update)) {
+            handleResult = new ArrayList<>(handleResult);
+            handleResult.addAll(userMenuStrategy.handle(update));
         }
 
-        return methodCall.get();
+        return handleResult;
+    }
+
+    private List<BotApiMethod<?>> getHanlderResult(UpdateHandlingStrategy handler, Update update) {
+        if (isNull(handler)) {
+            return List.of(SendMessage.builder()
+                    .chatId(update.getMessage().getChatId())
+                    .text("Запрос не удалось обработать сообщение")
+                    .build());
+        }
+        return handler.handle(update);
     }
 
 }

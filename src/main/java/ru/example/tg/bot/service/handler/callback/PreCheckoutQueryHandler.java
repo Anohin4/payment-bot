@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.payments.PreCheckoutQuery;
 
+import java.util.List;
 import java.util.Optional;
 
 import static java.util.Objects.nonNull;
@@ -13,14 +14,14 @@ import static java.util.Objects.nonNull;
 
 public class PreCheckoutQueryHandler implements UpdateHandlingStrategy {
     @Override
-    public Optional<BotApiMethod<?>> handle(Update update) {
+    public List<BotApiMethod<?>> handle(Update update) {
         System.out.println("Start of PreCheckoutQueryHandler");
         PreCheckoutQuery preCheckoutQuery = update.getPreCheckoutQuery();
         AnswerPreCheckoutQuery preCheckoutQueryCommand = AnswerPreCheckoutQuery.builder()
                 .ok(true)
                 .preCheckoutQueryId(preCheckoutQuery.getId())
                 .build();
-        return Optional.of(preCheckoutQueryCommand);
+        return List.of(preCheckoutQueryCommand);
     }
 
     @Override

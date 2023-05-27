@@ -5,6 +5,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.List;
 import java.util.Optional;
 
 public class HelpStrategy extends AbstractCommandHandlerStrategy {
@@ -15,9 +16,9 @@ public class HelpStrategy extends AbstractCommandHandlerStrategy {
     }
 
     @Override
-    public Optional<BotApiMethod<?>> handle(Update update) {
+    public List<BotApiMethod<?>> handle(Update update) {
         System.out.println("Start of HelpStrategy");
-        return Optional.of(SendMessage.builder()
+        return List.of(SendMessage.builder()
                 .chatId(update.getMessage().getChatId())
                 .text("""
                         Доступные команды (но не на все могут быть права):

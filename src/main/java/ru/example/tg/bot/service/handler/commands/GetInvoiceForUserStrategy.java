@@ -11,23 +11,23 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.payments.LabeledPrice;
 
-import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
-public class GetInvoiceStrategy extends AbstractCommandHandlerStrategy {
+public class GetInvoiceForUserStrategy extends AbstractCommandHandlerStrategy {
 
     private final DatabaseRepository repository;
     private final String token;
 
-    public GetInvoiceStrategy(DatabaseRepository repository, String paymentToken, String ownerChatId) {
+    public GetInvoiceForUserStrategy(DatabaseRepository repository, String paymentToken, String ownerChatId) {
         super(ownerChatId);
         this.repository = repository;
         this.token = paymentToken;
     }
 
     @Override
-    public Optional<BotApiMethod<?>> handle(Update update) {
+    public List<BotApiMethod<?>> handle(Update update) {
 
         Message message = update.getMessage();
         String userName = message.getFrom().getUserName();
@@ -36,7 +36,7 @@ public class GetInvoiceStrategy extends AbstractCommandHandlerStrategy {
 
         if (firstByUserName.isPresent()) {
             InvoiceEntity invoiceEntity = firstByUserName.get();
-            return Optional.of(SendInvoice.builder()
+            return List.of(SendInvoice.builder()
                     .chatId(message.getChatId())
                     .title("Оплата работ по локализации")
                     .description(invoiceEntity.getDescription())
@@ -51,9 +51,9 @@ public class GetInvoiceStrategy extends AbstractCommandHandlerStrategy {
                     .build());
         }
 
-        return Optional.of(SendMessage.builder()
+        return List.of(SendMessage.builder()
                 .chatId(message.getChatId())
-                .text("У вас нет не оплаченных инвойсов")
+                .text("У вас нет неоплаченных инвойсов")
                 .build());
 
 
