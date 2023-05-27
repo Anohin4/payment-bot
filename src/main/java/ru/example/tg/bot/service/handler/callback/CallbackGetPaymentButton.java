@@ -36,6 +36,8 @@ public class CallbackGetPaymentButton implements UpdateHandlingStrategy {
 
     @Override
     public boolean on(Update update) {
-        return nonNull(update.getCallbackQuery()) && nonNull(update.getCallbackQuery().getData()) && update.getCallbackQuery().getData().equals(CommandEnum.GET_INVOICE_BY_USER.getValue());
+        return nonNull(update.getCallbackQuery())
+                && nonNull(update.getCallbackQuery().getData())
+                && update.getCallbackQuery().getData().equals(CommandEnum.GET_INVOICE_BY_USER.getValue());
     }
 }

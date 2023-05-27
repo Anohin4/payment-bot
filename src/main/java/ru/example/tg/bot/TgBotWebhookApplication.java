@@ -32,6 +32,7 @@ public class TgBotWebhookApplication implements Function<Request, Response> {
         String ownerChat = System.getenv("owner_chat");
         ObjectMapper mapper = new ObjectMapper();
         DatabaseRepository ydbRepository = new YdbRepository(dbConnection, dbPath);
+        System.out.println(request.getBody());
         Update body = mapper.readValue(request.getBody(), Update.class);
 
 

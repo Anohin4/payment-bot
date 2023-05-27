@@ -13,11 +13,11 @@ import static java.util.Objects.isNull;
 
 public class CommandChainImpl implements CommandChain {
     private final List<UpdateHandlingStrategy> handlerList;
-    private final UserMenuStrategy userMenuStrategy;
+    private final String ownerChatId;
 
     public CommandChainImpl(List<UpdateHandlingStrategy> handlerList, String ownerChatId) {
         this.handlerList = handlerList;
-        userMenuStrategy = new UserMenuStrategy(ownerChatId);
+        this.ownerChatId = ownerChatId;
     }
 
     @Override
@@ -31,7 +31,9 @@ public class CommandChainImpl implements CommandChain {
             }
         }
         List<BotApiMethod<?>> handleResult = getHanlderResult(handler, update);
+
         //если нам нужно добавлять меню - добавляем
+        var userMenuStrategy = new UserMenuStrategy(ownerChatId, handleResult);
         if(userMenuStrategy.on(update)) {
             handleResult = new ArrayList<>(handleResult);
             handleResult.addAll(userMenuStrategy.handle(update));
