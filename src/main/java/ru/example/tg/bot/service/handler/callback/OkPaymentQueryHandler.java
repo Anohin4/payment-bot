@@ -47,7 +47,7 @@ public class OkPaymentQueryHandler implements UpdateHandlingStrategy {
                         .text("""
                                 Спасибо! Оплата прошла успешно.
                                                                 
-                                Если вам нужно оплатить ещё один инвойс, нажмите  ⬇️)""")
+                                Если вам нужно оплатить ещё один инвойс, нажмите  ⬇️""")
                         .replyMarkup(getInvoiceKeyboard())
                         .build());
     }

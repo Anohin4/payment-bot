@@ -25,6 +25,7 @@ public class UserMenuStrategy implements UpdateHandlingStrategy {
 
     @Override
     public List<BotApiMethod<?>> handle(Update update) {
+        System.out.println("sending menu on update " + update);
         return List.of(SendMessage
                 .builder()
                 .chatId(update.getMessage().getChatId())
@@ -37,6 +38,9 @@ public class UserMenuStrategy implements UpdateHandlingStrategy {
 
     @Override
     public boolean on(Update update) {
+        if(isNull(update.getMessage()) || isNull(update.getMessage().getChatId())) {
+            return false;
+        }
         String chatId = String.valueOf(update.getMessage().getChatId());
         return thisIsNotAdminChatAndThisIsRequest(update, chatId) && thisInNotInvoiceRequest();
     }
